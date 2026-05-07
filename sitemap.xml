@@ -1,79 +1,43 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- Homepage -->
   <url>
-    <loc>https://www.pearlskyug.com/</loc>
+    <loc>https://pearlairtraveug.online/</loc>
     <lastmod>2026-05-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- About -->
   <url>
-    <loc>https://www.pearlskyug.com/#about</loc>
+    <loc>https://pearlairtraveug.online/flights.html</loc>
     <lastmod>2026-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
   </url>
 
-  <!-- Destinations -->
   <url>
-    <loc>https://www.pearlskyug.com/#destinations</loc>
+    <loc>https://pearlairtraveug.online/about.html</loc>
     <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.80</priority>
   </url>
 
-  <!-- Queen Elizabeth National Park -->
   <url>
-    <loc>https://www.pearlskyug.com/#destinations</loc>
+    <loc>https://pearlairtraveug.online/contact.html</loc>
     <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.75</priority>
   </url>
 
-  <!-- Bwindi Impenetrable Forest -->
   <url>
-    <loc>https://www.pearlskyug.com/#destinations</loc>
+    <loc>https://pearlairtraveug.online/manage.html</loc>
     <lastmod>2026-05-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Murchison Falls National Park -->
-  <url>
-    <loc>https://www.pearlskyug.com/#destinations</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Routes -->
-  <url>
-    <loc>https://www.pearlskyug.com/#routes</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Timetable -->
-  <url>
-    <loc>https://www.pearlskyug.com/#timetable</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Contact -->
-  <url>
-    <loc>https://www.pearlskyug.com/#contact</loc>
-    <lastmod>2026-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.65</priority>
   </url>
 
 </urlset>
