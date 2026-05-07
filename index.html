@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PearlSky | Fly Beyond the Pearl of Africa</title>
+<meta name="description" content="PearlSky — Uganda's premium flight booking service. Book flights from Entebbe, choose your seat, pay via Airtel or WhatsApp, get instant e-ticket.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: #07050A; color: #F1EFF7; scroll-behavior: smooth; }
+  :root {
+    --pearl: #E8D5A3; --pearl-dk: #C9A84C; --sky: #2D9CDB; --night: #0A0F1C;
+    --night-md: #111827; --mist: #8A9BB5; --fog: #C8D3E4; --crane: #D94F3D; --green: #1A7A4A;
+    --r: 14px; --r-lg: 22px;
+  }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,15,28,0.9); backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(232,213,163,0.12); padding: 0 2rem;
+  }
+  .nav-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 70px; }
+  .logo h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
+  .logo span:first-child { color: var(--pearl); }
+  .logo span:last-child { color: var(--sky); }
+  .nav-cta { background: var(--crane); border: none; padding: 8px 22px; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; transition: 0.2s; }
+  .hero {
+    min-height: 90vh;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(45,156,219,0.1), transparent 60%),
+                linear-gradient(170deg, rgba(6,11,24,0.96), rgba(17,31,58,0.9)),
+                url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&fit=crop') center/cover;
+    background-size: cover; display: flex; flex-direction: column; justify-content: center; padding-top: 80px;
+  }
+  .hero-content { max-width: 1280px; margin: 0 auto; padding: 4rem 2rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 6vw, 74px); font-weight: 900; line-height: 1.1; }
+  .hero h1 em { color: var(--pearl); font-style: italic; }
+  .hero .sky { color: var(--sky); }
+  .search-card {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(232,213,163,0.2);
+    border-radius: 32px; padding: 24px; margin: 32px 0 0; backdrop-filter: blur(12px);
+  }
+  .flex-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+  .field { flex: 1; min-width: 140px; }
+  .field label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--mist); display: block; margin-bottom: 5px; }
+  .field input, .field select { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 12px 16px; border-radius: 24px; color: white; }
+  .btn-gold { background: linear-gradient(135deg, var(--pearl-dk), #B78F2A); border: none; padding: 12px 28px; border-radius: 40px; font-weight: 700; cursor: pointer; color: #0B080F; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin: 48px 0 24px; border-left: 4px solid var(--pearl); padding-left: 20px; }
+  .route-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; margin-bottom: 60px; }
+  .route-card { background: #13101C; border-radius: 24px; overflow: hidden; cursor: pointer; transition: 0.25s; border: 1px solid rgba(232,213,163,0.2); }
+  .route-card:hover { transform: translateY(-6px); border-color: var(--pearl); }
+  .route-img { height: 160px; width: 100%; object-fit: cover; }
+  .route-info { padding: 18px; }
+  .price { font-size: 1.5rem; font-weight: 800; color: var(--pearl); }
+  footer { background: #0A0F1C; border-top: 1px solid rgba(232,213,163,0.2); padding: 40px 0; text-align: center; font-size: 0.8rem; color: var(--mist); }
+  .search-results { margin-top: 20px; display: none; }
+  .search-results.visible { display: block; }
+
+  /* ---------- MODAL STYLES (full from provided code) ---------- */
+  .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(6,11,24,0.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:1rem;overflow-y:auto;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--night-md);border:1px solid rgba(232,213,163,0.25);border-radius:var(--r-lg);width:100%;max-width:720px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,0.7);animation:modalSlide .35s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes modalSlide{from{opacity:0;transform:translateY(40px) scale(.97);}to{opacity:1;transform:none;}}
+  .modal-head{padding:1.75rem 2rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:var(--night-md);z-index:10;}
+  .modal-head h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;}
+  .modal-head p{font-size:13px;color:var(--mist);margin-top:3px;}
+  .modal-close{background:rgba(255,255,255,0.07);border:none;color:var(--mist);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+  .modal-close:hover{background:rgba(255,255,255,0.14);color:#fff;}
+  .modal-body{padding:1.75rem 2rem;}
+  .step-track{display:flex;align-items:center;margin-bottom:2rem;gap:0;padding:0 .25rem;}
+  .step-seg{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;position:relative;cursor:default;}
+  .step-seg:not(:last-child)::after{content:'';position:absolute;top:16px;left:50%;width:100%;height:2px;background:rgba(255,255,255,0.08);z-index:0;transition:background .4s;}
+  .step-seg.done:not(:last-child)::after{background:rgba(78,205,164,0.5);}
+  .step-seg-dot{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--mist);z-index:1;transition:all .35s cubic-bezier(.34,1.56,.64,1);}
+  .step-seg.active .step-seg-dot{border-color:var(--pearl-dk);background:var(--pearl-dk);color:#fff;transform:scale(1.15);box-shadow:0 0 0 4px rgba(201,168,76,0.18);}
+  .step-seg.done .step-seg-dot{border-color:#4ECDA4;background:rgba(78,205,164,0.15);color:#4ECDA4;}
+  .step-seg-label{font-size:10px;letter-spacing:.5px;color:var(--mist);transition:color .3s;white-space:nowrap;}
+  .step-seg.active .step-seg-label{color:var(--pearl);font-weight:600;}
+  .booking-flight-summary{background:rgba(232,213,163,0.07);border:1px solid rgba(232,213,163,0.2);border-radius:var(--r);padding:1.25rem;margin-bottom:1.5rem;}
+  .bfs-route{display:flex;align-items:center;gap:12px;font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--pearl);margin-bottom:.5rem;}
+  .bfs-meta{font-size:13px;color:var(--mist);display:flex;gap:1.5rem;flex-wrap:wrap;}
+  .form-section-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mist);font-weight:500;margin-bottom:1rem;margin-top:1.5rem;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-weight:500;}
+  .field input,.field select,.field textarea{padding:12px 14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:var(--white);font-size:14px;font-family:'DM Sans',sans-serif;transition:border-color .2s;width:100%;}
+  .trip-toggle{display:flex;gap:8px;margin-bottom:1.5rem;}
+  .trip-toggle-btn{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:var(--mist);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .2s;text-align:center;}
+  .trip-toggle-btn.active{background:var(--crane);border-color:var(--crane);color:#fff;}
+  .err-box{display:none;background:rgba(217,79,61,.15);border:1px solid rgba(217,79,61,.4);border-radius:8px;padding:10px 14px;color:#FF8A75;font-size:13px;margin-top:1rem;}
+  .modal-nav{display:flex;gap:12px;margin-top:1.75rem;}
+  .btn-back-modal{flex:1;padding:13px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:rgba(255,255,255,.65);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+  .btn-back-modal:hover{background:rgba(255,255,255,.11);color:#fff;border-color:rgba(255,255,255,.22);}
+  .btn-next-modal{flex:2;padding:14px;background:linear-gradient(135deg,var(--crane),#E8453A);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(217,79,61,.3);}
+  .pax-btn{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:border-color .2s;}
+  .pax-form-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;}
+  .pax-form-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--pearl);font-weight:600;margin-bottom:1rem;}
+  .seat-map-container{margin-top:1rem;}
+  .seat-map-container .seat{width:32px;height:32px;border-radius:6px 6px 4px 4px;border:1.5px solid;cursor:pointer;font-size:10px;font-weight:700;transition:all .15s;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:var(--mist);}
+  .seat-map-container .seat.selected{background:var(--pearl-dk);border-color:var(--pearl);color:#fff;}
+  .seat-map-container .seat.occupied{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.15);cursor:not-allowed;}
+  .seat-selected-info{background:rgba(232,213,163,0.08);border:1px solid rgba(232,213,163,0.2);border-radius:10px;padding:.75rem 1rem;margin-top:1rem;font-size:13px;color:var(--pearl);text-align:center;}
+  .review-block{margin-bottom:1.25rem;}
+  .review-block-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.6rem;}
+  .review-row{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+  .review-total{display:flex;justify-content:space-between;align-items:center;background:rgba(232,213,163,.1);border:1px solid rgba(232,213,163,.25);border-radius:12px;padding:1rem 1.25rem;margin-top:1rem;font-size:20px;font-weight:700;}
+  .review-total .amt{color:var(--pearl);font-family:'Playfair Display',serif;font-size:26px;}
+  .wa-confirm-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:16px;background:#25D366;border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:.75rem;}
+  .ticket-overlay{display:none;position:fixed;inset:0;z-index:600;background:rgba(6,11,24,0.96);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:1rem;overflow-y:auto;}
+  .ticket-overlay.open{display:flex;}
+  .ticket-wrapper{display:flex;flex-direction:column;align-items:center;gap:1.5rem;width:100%;max-width:560px;}
+  .boarding-pass{background:#fff;border-radius:20px;width:100%;overflow:hidden;color:#1a1a2e;}
+  .bp-header{background:linear-gradient(135deg,#0A1428 0%,#1C2640 60%,#0D1629 100%);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+  .bp-logo-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;}
+  .bp-status-pill{background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.4);border-radius:20px;padding:5px 14px;display:flex;align-items:center;gap:6px;font-size:11px;color:#4ECDA4;}
+  .bp-route-section{background:linear-gradient(135deg,#0f1f3d,#162040);padding:2rem;display:flex;align-items:center;gap:1.5rem;}
+  .bp-iata{font-family:'Playfair Display',serif;font-size:52px;font-weight:900;color:#fff;line-height:1;}
+  .bp-details{background:#f8f9ff;padding:1.5rem 2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+  .bp-price-bar{background:linear-gradient(135deg,#e8d5a3,#c9a84c);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+  .bp-price-amt{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:#0a1428;}
+  .ticket-action-btns{display:flex;gap:12px;width:100%}
+  .wa-send-btn{flex:1;background:#25D366;border:none;border-radius:14px;padding:15px 20px;color:#fff;font-weight:700;cursor:pointer;}
+  .pay-overlay{display:none;position:fixed;inset:0;z-index:700;background:rgba(6,11,24,0.96);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:1rem;}
+  .pay-overlay.open{display:flex;}
+  .pay-modal{background:var(--night-md);border:1px solid rgba(255,82,0,0.35);border-radius:24px;max-width:460px;width:100%;}
+  /* add more .pay-* styles as needed, but we'll keep minimal since not all may be used */
+  @media (max-width: 700px) {
+    .flex-row { flex-direction: column; }
+    .hero-content { padding: 2rem 1rem; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><h1><span>Pearl</span><span>Sky</span></h1><div style="font-size:10px;letter-spacing:2px;">Fly beyond the pearl</div></div>
+    <button class="nav-cta" id="navBookBtn">Book now</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div style="margin-bottom:1rem;"><span style="background:rgba(232,213,163,0.2);padding:4px 12px;border-radius:30px;">✈ Uganda's finest carrier</span></div>
+    <h1>Your Journey <em>starts here</em><br>with <span class="sky">PearlSky</span></h1>
+    <p style="color:var(--mist);max-width:500px;margin:1rem 0;">Book flights from Entebbe to 35+ destinations. Choose your seat, pay easily, confirm via WhatsApp.</p>
+    <div class="search-card">
+      <div class="flex-row">
+        <div class="field"><label>From</label><input id="fromInput" value="Entebbe (EBB)" list="airportsList"></div>
+        <div class="field"><label>To</label><input id="toInput" value="Zanzibar (ZNZ)" list="airportsList"></div>
+        <datalist id="airportsList">
+          <option value="Entebbe (EBB)"><option value="Kampala (KLA)"><option value="Bwindi / Kisoro (KXO)">
+          <option value="Murchison Falls (PAF)"><option value="Kisumu / Lake Victoria (KIS)">
+          <option value="Queen Elizabeth NP (KSE)"><option value="Kidepo Valley (KDY)">
+          <option value="Lake Mburo (LMB)"><option value="Ssese Islands (SSI)">
+          <option value="Nairobi (NBO)"><option value="Masai Mara (MRE)"><option value="Mombasa (MBA)">
+          <option value="Diani Beach (DIB)"><option value="Amboseli (ASV)"><option value="Samburu (UAS)">
+          <option value="Lamu Island (LAU)"><option value="Nanyuki (NYK)"><option value="Kisumu Kenya (KIS)">
+          <option value="Zanzibar (ZNZ)"><option value="Dar es Salaam (DAR)"><option value="Serengeti (SEU)">
+          <option value="Kilimanjaro (JRO)"><option value="Arusha (ARK)"><option value="Selous (SGL)">
+          <option value="Ruaha (RUA)"><option value="Mafia Island (MFA)"><option value="Kigali (KGL)">
+          <option value="Bujumbura (BJM)"><option value="Juba (JUB)"><option value="Addis Ababa (ADD)">
+          <option value="Dubai (DXB)"><option value="Doha (DOH)"><option value="Abu Dhabi (AUH)">
+          <option value="Istanbul (IST)"><option value="Cairo (CAI)"><option value="Mumbai (BOM)">
+          <option value="London Gatwick (LGW)"><option value="London Heathrow (LHR)">
+          <option value="Amsterdam (AMS)"><option value="Brussels (BRU)">
+          <option value="Johannesburg (JNB)"><option value="Lagos (LOS)">
+        </datalist>
+        <div class="field"><label>Departure</label><input type="date" id="departDate" value="2026-05-20"></div>
+        <div class="field"><label>Passengers</label><select id="passengerCountSelect"><option>1 Adult</option><option>2 Adults</option><option>3 Adults</option><option>4 Adults</option></select></div>
+        <button class="btn-gold" id="searchBtn">🔍 Search flights</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <h2 class="section-title">✈ Popular routes from Entebbe</h2><div class="route-grid" id="popularRoutes"></div>
+  <h2 class="section-title">🦁 Safari & beach escapes (East Africa)</h2><div class="route-grid" id="safariRoutes"></div>
+  <h2 class="section-title">🔥 Flight deals – limited time</h2><div class="route-grid" id="dealsRoutes"></div>
+  <div id="searchResultsSection" class="search-results"><h2 class="section-title">🔍 Matching flights</h2><div class="route-grid" id="searchResultsGrid"></div></div>
+</div>
+
+<footer><p><i class="fab fa-whatsapp"></i> WhatsApp support & booking confirmation: <strong>+254 786 781 665</strong> — 24/7</p><p>© 2025 PearlSky — Uganda's premium flight booking</p></footer>
+
+<!-- ========== ADVANCED BOOKING MODAL (full features) ========== -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div><h2 id="modal-title">Book Your Flight</h2><p id="modal-subtitle">Step 1 of 4 — Trip Type & Contact</p></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="step-track" id="step-track">
+        <div class="step-seg active" id="seg-1"><div class="step-seg-dot">1</div><span class="step-seg-label">Details</span></div>
+        <div class="step-seg" id="seg-2"><div class="step-seg-dot">2</div><span class="step-seg-label">Passengers</span></div>
+        <div class="step-seg" id="seg-3"><div class="step-seg-dot">3</div><span class="step-seg-label">Seats</span></div>
+        <div class="step-seg" id="seg-4"><div class="step-seg-dot">4</div><span class="step-seg-label">Review</span></div>
+      </div>
+      <div class="booking-flight-summary" id="modal-flight-summary" style="display:none;">
+        <div class="bfs-route"><span id="bfs-from">EBB</span> ✈ <span id="bfs-to">—</span></div>
+        <div class="bfs-meta"><span id="bfs-date">—</span><span id="bfs-class">Economy</span><span id="bfs-airline">—</span><span id="bfs-price">—</span></div>
+      </div>
+
+      <!-- STEP 1: DETAILS (includes destination picker, trip type, lead passenger) -->
+      <div id="modal-step-1">
+        <div class="dest-picker-section">
+          <span class="dest-picker-label">Quick-Select Your Destination</span>
+          <div class="dest-category"><div class="dest-category-title">🇺🇬 Uganda — National Parks</div><div class="dest-pills-row"><button class="dest-pill" onclick="pickDest('Murchison Falls NP, Uganda')">🌊 Murchison Falls</button><button class="dest-pill" onclick="pickDest('Bwindi Impenetrable NP, Uganda')">🦍 Bwindi</button><button class="dest-pill" onclick="pickDest('Queen Elizabeth NP, Uganda')">🦁 Queen Elizabeth</button><button class="dest-pill" onclick="pickDest('Kibale Forest NP, Uganda')">🐒 Kibale</button><button class="dest-pill" onclick="pickDest('Mgahinga Gorilla NP, Uganda')">🦍 Mgahinga</button><button class="dest-pill" onclick="pickDest('Rwenzori Mountains NP, Uganda')">⛰️ Rwenzori</button><button class="dest-pill" onclick="pickDest('Mweya & Kazinga Channel, Uganda')">⛵ Kazinga Channel</button></div></div>
+          <div class="dest-category"><div class="dest-category-title">🌍 East Africa Safaris</div><div class="dest-pills-row"><button class="dest-pill" onclick="pickDest('Masai Mara, Kenya')">🦓 Masai Mara</button><button class="dest-pill" onclick="pickDest('Zanzibar, Tanzania')">🏝️ Zanzibar</button><button class="dest-pill" onclick="pickDest('Serengeti, Tanzania')">🐘 Serengeti</button><button class="dest-pill" onclick="pickDest('Amboseli, Kenya')">🏔️ Amboseli</button><button class="dest-pill" onclick="pickDest('Kigali (KGL), Rwanda')">🇷🇼 Kigali</button><button class="dest-pill" onclick="pickDest('Dar es Salaam (DAR), Tanzania')">🇹🇿 Dar es Salaam</button></div></div>
+          <div class="dest-category"><div class="dest-category-title">✈️ International Flights from Entebbe</div><div class="dest-pills-row"><button class="dest-pill" onclick="pickDest('Nairobi (NBO), Kenya')">🇰🇪 Nairobi</button><button class="dest-pill" onclick="pickDest('Dubai (DXB), UAE')">🇦🇪 Dubai</button><button class="dest-pill" onclick="pickDest('London Gatwick (LGW), UK')">🇬🇧 London</button><button class="dest-pill" onclick="pickDest('Doha (DOH), Qatar')">🇶🇦 Doha</button><button class="dest-pill" onclick="pickDest('Johannesburg (JNB), South Africa')">🇿🇦 Joburg</button><button class="dest-pill" onclick="pickDest('Addis Ababa (ADD), Ethiopia')">🇪🇹 Addis</button></div></div>
+          <div id="dest-selected-display" class="dest-selected-display">✅ Selected: <strong id="dest-selected-text">—</strong></div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,0.07);margin:0 0 1.5rem;"></div>
+        <div class="form-section-title">✈ Trip Type</div>
+        <div class="trip-toggle"><button class="trip-toggle-btn active" id="tt-one" onclick="setModalTrip('one')">→ One Way</button><button class="trip-toggle-btn" id="tt-round" onclick="setModalTrip('round')">⇄ Return Trip</button></div>
+        <div class="form-grid">
+          <div class="field"><label>From *</label><input id="m-from" type="text" placeholder="e.g. Entebbe (EBB)" list="airportsList"/></div>
+          <div class="field"><label>To *</label><input id="m-to" type="text" placeholder="e.g. Nairobi (NBO)" list="airportsList"/></div>
+          <div class="field"><label>Departure Date *</label><input id="m-depart" type="date" style="color-scheme:dark;"/></div>
+          <div class="field" id="return-date-field" style="display:none;"><label>Return Date *</label><input id="m-return" type="date" style="color-scheme:dark;"/></div>
+          <div class="field"><label>Cabin Class</label><select id="m-cabin" style="color-scheme:dark;"><option>Economy</option><option>Premium Economy</option><option>Business Class</option><option>First Class</option></select></div>
+          <div class="field"><label>Airline (optional)</label><input id="m-airline" type="text" placeholder="Any airline" list="airlines-list"/><datalist id="airlines-list"><option value="Uganda Airlines"><option value="Emirates"><option value="Qatar Airways"><option value="Kenya Airways"><option value="Turkish Airlines"><option value="Ethiopian Airlines"><option value="RwandAir"><option value="Brussels Airlines"><option value="KLM"><option value="FlyDubai"><option value="EgyptAir"></datalist></div>
+        </div>
+        <div class="form-section-title">👤 Lead Passenger</div>
+        <div class="form-grid">
+          <div class="field"><label>First Name *</label><input id="m-fname" type="text" placeholder="Given name"/></div>
+          <div class="field"><label>Last Name *</label><input id="m-lname" type="text" placeholder="Surname"/></div>
+          <div class="field"><label>Email Address *</label><input id="m-email" type="email" placeholder="your@email.com"/></div>
+          <div class="field"><label>WhatsApp Number *</label><input id="m-phone" type="tel" placeholder="+256 700 000 000"/></div>
+          <div class="field"><label>Nationality</label><input id="m-nat" type="text" placeholder="e.g. Ugandan"/></div>
+          <div class="field"><label>Passport Number</label><input id="m-passport" type="text" placeholder="For booking reference"/></div>
+        </div>
+        <div class="form-section-title">🎒 Add-ons</div>
+        <div class="form-grid">
+          <div class="field"><label>Extra Baggage</label><select id="m-baggage" style="color-scheme:dark;"><option value="0">No extra baggage</option><option value="23">+23kg — $40</option><option value="32">+32kg — $65</option></select></div>
+          <div class="field"><label>Meal Preference</label><select id="m-meal" style="color-scheme:dark;"><option>Standard meal</option><option>Vegetarian (VGML)</option><option>Vegan (VGNL)</option><option>Halal (MOML)</option><option>Kosher (KSML)</option><option>No meal</option></select></div>
+        </div>
+        <div class="err-box" id="step1-err">⚠️ Please fill in all required fields (name, email, WhatsApp, route & date).</div>
+        <div class="modal-nav"><button class="btn-next-modal" onclick="nextStep(2)">Next: Add Passengers →</button></div>
+      </div>
+
+      <!-- STEP 2: PASSENGERS -->
+      <div id="modal-step-2" style="display:none;">
+        <div class="form-section-title">🧳 How many passengers?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1rem;">
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r);padding:1rem;text-align:center;"><div style="font-size:13px;font-weight:600;color:var(--fog);margin-bottom:2px;">Adults</div><div style="font-size:11px;color:var(--mist);margin-bottom:.75rem;">12+ years</div><div style="display:flex;align-items:center;justify-content:center;gap:12px;"><button class="pax-btn" onclick="chgM('adult',-1)">−</button><span class="pax-val" id="m-adult-val" style="font-size:22px;font-weight:700;min-width:28px;">1</span><button class="pax-btn" onclick="chgM('adult',1)">+</button></div></div>
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r);padding:1rem;text-align:center;"><div style="font-size:13px;font-weight:600;color:var(--fog);margin-bottom:2px;">Children</div><div style="font-size:11px;color:var(--mist);margin-bottom:.75rem;">2–11 years</div><div style="display:flex;align-items:center;justify-content:center;gap:12px;"><button class="pax-btn" onclick="chgM('child',-1)">−</button><span class="pax-val" id="m-child-val" style="font-size:22px;font-weight:700;min-width:28px;">0</span><button class="pax-btn" onclick="chgM('child',1)">+</button></div></div>
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r);padding:1rem;text-align:center;"><div style="font-size:13px;font-weight:600;color:var(--fog);margin-bottom:2px;">Infants</div><div style="font-size:11px;color:var(--mist);margin-bottom:.75rem;">Under 2</div><div style="display:flex;align-items:center;justify-content:center;gap:12px;"><button class="pax-btn" onclick="chgM('infant',-1)">−</button><span class="pax-val" id="m-infant-val" style="font-size:22px;font-weight:700;min-width:28px;">0</span><button class="pax-btn" onclick="chgM('infant',1)">+</button></div></div>
+        </div>
+        <div style="background:rgba(232,213,163,0.07);border:1px solid rgba(232,213,163,0.18);border-radius:10px;padding:10px 14px;margin-bottom:1.5rem;font-size:13px;color:var(--pearl);display:flex;align-items:center;gap:8px;"><span>👥</span><span id="pax-count-summary">1 passenger — 1 adult</span></div>
+        <div class="form-section-title" style="margin-top:0;">Fill in details for each passenger</div>
+        <div id="pax-forms-container"></div>
+        <div class="err-box" id="step2-err">⚠️ Please fill in first and last name for all passengers.</div>
+        <div class="modal-nav"><button class="btn-back-modal" onclick="nextStep(1)">← Back</button><button class="btn-next-modal" onclick="nextStep(3)">Next: Choose Seats →</button></div>
+      </div>
+
+      <!-- STEP 3: SEAT MAP -->
+      <div id="modal-step-3" style="display:none;">
+        <div id="outbound-seat-section"><div class="form-section-title" id="outbound-seat-label">💺 Choose Outbound Seat</div><div class="seat-map-container" id="seat-map-out"></div><div class="seat-selected-info" id="seat-info-out">No seat selected — tap a seat above</div></div>
+        <div id="return-seat-section" style="display:none;margin-top:2rem;"><div class="form-section-title">↩️ Choose Return Seat</div><div class="seat-map-container" id="seat-map-ret"></div><div class="seat-selected-info" id="seat-info-ret">No return seat selected — tap a seat above</div></div>
+        <div class="err-box" id="step3-err">⚠️ Please select at least one seat to continue.</div>
+        <div class="modal-nav"><button class="btn-back-modal" onclick="nextStep(2)">← Back</button><button class="btn-next-modal" onclick="nextStep(4)">Review Booking →</button></div>
+      </div>
+
+      <!-- STEP 4: REVIEW + CONFIRM -->
+      <div id="modal-step-4" style="display:none;" class="step-content">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mist);margin-bottom:1.25rem;">Review your booking</div>
+        <div class="review-block"><div class="review-block-title">✈ Flight Details</div><div id="rv-flight-rows"></div></div>
+        <div class="review-block"><div class="review-block-title">👤 Lead Passenger</div><div class="review-row"><span>Name</span><span id="rv-name">—</span></div><div class="review-row"><span>Email</span><span id="rv-email">—</span></div><div class="review-row"><span>WhatsApp</span><span id="rv-phone">—</span></div><div class="review-row"><span>Passport</span><span id="rv-passport">—</span></div></div>
+        <div class="review-block"><div class="review-block-title">🧳 All Passengers</div><div id="rv-pax-list"></div></div>
+        <div class="review-block"><div class="review-block-title">💺 Seat Selection</div><div id="rv-seats"></div></div>
+        <div class="review-total"><span>Total Fare</span><span class="amt" id="rv-total">—</span></div>
+        <p style="font-size:12px;color:var(--mist);margin-top:.75rem;">Prices are estimates. Final fare confirmed by our agent via WhatsApp within 30 minutes.</p>
+        <div style="background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.2);border-radius:14px;padding:1.25rem;margin-top:1.25rem;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:.75rem;"><svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><div style="font-size:13px;font-weight:600;color:#25D366;">Confirm on WhatsApp +254 786 781 665</div></div>
+          <div style="font-size:12px;color:var(--mist);margin-bottom:1rem;">Your booking and ticket will be sent directly to our agent on WhatsApp.</div>
+          <button class="wa-confirm-btn" onclick="showTicketAndConfirm()" style="margin-top:0;"><svg class="wa-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Generate Ticket & Send to WhatsApp</button>
+        </div>
+        <div class="modal-nav"><button class="btn-back-modal" onclick="nextStep(3)">← Back to Seats</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TICKET & PAYMENT OVERLAYS (simplified from provided) -->
+<div class="ticket-overlay" id="ticket-overlay"><div class="ticket-wrapper"><div class="boarding-pass" id="ticket-card"><div class="bp-header"><div class="bp-logo-area"><div class="bp-logo-text"><span class="cr">Pearl</span><span class="ar">Air</span></div></div><div class="bp-status-pill"><div class="bp-status-dot"></div>Pending Confirmation</div></div><div class="bp-route-section"><div class="bp-city"><div class="bp-iata" id="t-from-iata">EBB</div><div class="bp-city-name">Entebbe</div></div><div class="bp-flight-mid"><div class="bp-flight-path"><div class="bp-path-dot"></div><div class="bp-path-line"></div><div class="bp-plane-svg">✈</div><div class="bp-path-line-r"></div></div><div class="bp-trip-type" id="t-trip-type">ONE WAY</div></div><div class="bp-city"><div class="bp-iata" id="t-to-iata">—</div><div class="bp-city-name">Destination</div></div></div><div class="bp-details"><div><div class="bp-det-label">Departure</div><div id="t-dep-date">—</div></div><div><div class="bp-det-label">Return</div><div id="t-ret-date">—</div></div><div><div class="bp-det-label">Seat(s)</div><div id="t-seats">—</div></div></div><div class="bp-price-bar"><div><div class="bp-price-label">Total</div></div><div class="bp-price-amt" id="t-total-price">$0</div></div></div><div class="ticket-action-btns"><button class="ticket-back-btn" onclick="closeTicket()">← Edit</button><button class="wa-send-btn" onclick="openPayModal()">📲 Pay with Airtel Money</button></div></div></div>
+<div class="pay-overlay" id="pay-overlay"><div class="pay-modal"><div class="pay-header"><div class="pay-logo"><div class="pay-logo-badge">Airtel Money</div></div><button class="pay-header-close" onclick="closePayModal()">✕</button></div><div class="pay-body"><div class="pay-amount-block"><div><div class="pay-amount-label">Amount Due</div><div class="pay-amount-usd" id="pay-amt-usd">$0</div></div></div><div class="pay-phone-field"><label>Your Airtel Money Number</label><input type="tel" id="pay-phone-input" placeholder="+254 7XX XXX XXX"></div><button class="btn-pay-airtel" onclick="initiateAirtelPayment()">Send Payment Request</button><button class="pay-skip" onclick="skipPaymentAndWhatsApp()">Skip payment — confirm via WhatsApp only</button></div></div></div>
+
+<script>
+// ---------- Flight Routes & UI helpers (same as before + modal integration) ----------
+const flightRoutes = [
+  { id:1, from:"Entebbe (EBB)", to:"Dubai (DXB)", airline:"Emirates", price:380, duration:"5h 10m", img:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=500&h=250&fit=crop", type:"popular", fromCode:"EBB", toCode:"DXB" },
+  { id:2, from:"Entebbe (EBB)", to:"Nairobi (NBO)", airline:"Uganda Airlines", price:95, duration:"1h 05m", img:"https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=500&h=250&fit=crop", type:"popular", fromCode:"EBB", toCode:"NBO" },
+  { id:3, from:"Entebbe (EBB)", to:"London Gatwick (LGW)", airline:"Uganda Airlines", price:780, duration:"8h 40m", img:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&h=250&fit=crop", type:"popular", fromCode:"EBB", toCode:"LGW" },
+  { id:4, from:"Entebbe (EBB)", to:"Johannesburg (JNB)", airline:"Ethiopian", price:340, duration:"4h 50m", img:"https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=500&h=250&fit=crop", type:"popular", fromCode:"EBB", toCode:"JNB" },
+  { id:5, from:"Entebbe (EBB)", to:"Kigali (KGL)", airline:"RwandAir", price:85, duration:"40 min", img:"https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=500&h=250&fit=crop", type:"safari", fromCode:"EBB", toCode:"KGL" },
+  { id:6, from:"Entebbe (EBB)", to:"Zanzibar (ZNZ)", airline:"Precision Air", price:225, duration:"3h", img:"https://images.unsplash.com/photo-1568849676085-51415703900f?w=500&h=250&fit=crop", type:"safari", fromCode:"EBB", toCode:"ZNZ" },
+  { id:7, from:"Entebbe (EBB)", to:"Masai Mara (MRE)", airline:"Safarilink", price:590, duration:"2 days", img:"https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=500&h=250&fit=crop", type:"safari", fromCode:"EBB", toCode:"MRE" },
+  { id:8, from:"Entebbe (EBB)", to:"Murchison Falls (PAF)", airline:"Aerolink", price:150, duration:"50 min", img:"https://images.unsplash.com/photo-1552537376-3abf35237215?w=500&h=250&fit=crop", type:"safari", fromCode:"EBB", toCode:"PAF" },
+  { id:9, from:"Entebbe (EBB)", to:"Doha (DOH)", airline:"Qatar Airways", price:420, duration:"4h 25m", img:"https://images.unsplash.com/photo-1571155476033-8ba1c4ded9e3?w=500&h=250&fit=crop", type:"deals", fromCode:"EBB", toCode:"DOH" }
+];
+
+let selectedFlight = null;
+let selectedSeatsOut = [], selectedSeatsRet = [];
+let mpax = { adult:1, child:0, infant:0 };
+let paxForms = [];
+let modalTrip = 'one';
+let bookingPrice = 0;
+
+function renderStaticGrids() {
+  const popular = flightRoutes.filter(r=>r.type==="popular");
+  const safari = flightRoutes.filter(r=>r.type==="safari");
+  const deals = flightRoutes.filter(r=>r.type==="deals");
+  document.getElementById("popularRoutes").innerHTML = "";
+  document.getElementById("safariRoutes").innerHTML = "";
+  document.getElementById("dealsRoutes").innerHTML = "";
+  popular.forEach(r=> document.getElementById("popularRoutes").appendChild(createCard(r)));
+  safari.forEach(r=> document.getElementById("safariRoutes").appendChild(createCard(r)));
+  deals.forEach(r=> document.getElementById("dealsRoutes").appendChild(createCard(r)));
+}
+function createCard(route) {
+  const card = document.createElement("div"); card.className = "route-card";
+  card.innerHTML = `<img class="route-img" src="${route.img}" alt="${route.to}"><div class="route-info"><div><strong>${route.to}</strong></div><div style="font-size:12px;color:var(--mist);">${route.airline} · ${route.duration}</div><div class="price">$${route.price}</div></div>`;
+  card.onclick = () => { selectedFlight = route; openModal(); };
+  return card;
+}
+function performSearch() {
+  const toQ = document.getElementById("toInput").value.toLowerCase();
+  const match = flightRoutes.filter(r=>r.to.toLowerCase().includes(toQ));
+  const resDiv = document.getElementById("searchResultsGrid");
+  document.getElementById("searchResultsSection").classList.add("visible");
+  resDiv.innerHTML = "";
+  (match.length?match:flightRoutes.slice(0,3)).forEach(r=>resDiv.appendChild(createCard(r)));
+}
+document.getElementById("searchBtn").onclick = performSearch;
+document.getElementById("navBookBtn").onclick = () => { if(flightRoutes[0]) { selectedFlight = flightRoutes[0]; openModal(); } };
+
+// MODAL FUNCTIONS (full)
+function openModal() {
+  if(selectedFlight) {
+    document.getElementById("bfs-from").innerText = selectedFlight.fromCode || "EBB";
+    document.getElementById("bfs-to").innerText = selectedFlight.toCode || "DEST";
+    document.getElementById("bfs-date").innerText = document.getElementById("departDate").value || "TBD";
+    document.getElementById("bfs-class").innerText = "Economy";
+    document.getElementById("bfs-airline").innerText = selectedFlight.airline;
+    document.getElementById("bfs-price").innerHTML = `$${selectedFlight.price}/adult`;
+    document.getElementById("modal-flight-summary").style.display = "block";
+    document.getElementById("m-from").value = selectedFlight.from;
+    document.getElementById("m-to").value = selectedFlight.to;
+    document.getElementById("m-airline").value = selectedFlight.airline;
+  } else {
+    document.getElementById("modal-flight-summary").style.display = "none";
+  }
+  nextStep(1, true);
+  document.getElementById("modal-overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal() { document.getElementById("modal-overlay").classList.remove("open"); document.body.style.overflow = ""; }
+function nextStep(n, force) {
+  if(!force) {
+    if(n===2) {
+      const req = ['m-fname','m-lname','m-email','m-phone','m-from','m-to','m-depart'];
+      if(req.some(id=>!document.getElementById(id).value.trim())) { document.getElementById("step1-err").style.display="block"; return; }
+      document.getElementById("step1-err").style.display="none";
+      buildPaxForms();
+    }
+    if(n===3 && selectedSeatsOut.length===0) { document.getElementById("step3-err").style.display="block"; return; }
+    if(n===4) buildReview();
+  }
+  [1,2,3,4].forEach(i=>{ let el=document.getElementById(`modal-step-${i}`); if(el) el.style.display="none"; });
+  document.getElementById(`modal-step-${n}`).style.display = "block";
+  [1,2,3,4].forEach(i=>{
+    let seg = document.getElementById(`seg-${i}`);
+    seg.classList.remove("active","done");
+    if(i<n) seg.classList.add("done");
+    else if(i===n) seg.classList.add("active");
+    let dot = seg.querySelector(".step-seg-dot");
+    if(dot) dot.innerText = i<n ? "✓" : i;
+  });
+  if(n===3) buildSeatMaps();
+}
+function setModalTrip(t) { modalTrip = t; document.getElementById("return-date-field").style.display = t==='round'?"":"none"; }
+function chgM(type, delta) {
+  mpax[type] = Math.max(type==='adult'?1:0, mpax[type]+delta);
+  document.getElementById(`m-${type}-val`).innerText = mpax[type];
+  buildPaxForms();
+}
+function buildPaxForms() {
+  const container = document.getElementById("pax-forms-container");
+  const saved = {};
+  paxForms.forEach(id=>{ saved[id]={}; ["fname","lname","dob","gender","pass","nat"].forEach(f=>{ let el=document.getElementById(`${id}-${f}`); if(el) saved[id][f]=el.value; }); });
+  container.innerHTML = "";
+  const types = [...Array(mpax.adult).fill("Adult"), ...Array(mpax.child).fill("Child"), ...Array(mpax.infant).fill("Infant")];
+  paxForms = [];
+  types.forEach((type,i)=>{
+    const id = `pf-${i}`; paxForms.push(id);
+    const prev = saved[id]||{};
+    const isLead = i===0;
+    const leadFname = document.getElementById("m-fname")?.value||"";
+    const leadLname = document.getElementById("m-lname")?.value||"";
+    const leadNat = document.getElementById("m-nat")?.value||"";
+    const leadPass = document.getElementById("m-passport")?.value||"";
+    const div = document.createElement("div"); div.className="pax-form-card";
+    div.innerHTML = `<div class="pax-form-label">Passenger ${i+1} — ${type}${isLead?" (LEAD)":""}</div><div class="form-grid"><div class="field"><label>First Name *</label><input id="${id}-fname" value="${isLead?prev.fname||leadFname:prev.fname||""}"></div><div class="field"><label>Last Name *</label><input id="${id}-lname" value="${isLead?prev.lname||leadLname:prev.lname||""}"></div><div class="field"><label>Gender</label><select id="${id}-gender"><option>Male</option><option>Female</option><option>Other</option></select></div><div class="field"><label>Passport / ID</label><input id="${id}-pass" value="${isLead?prev.pass||leadPass:prev.pass||""}"></div><div class="field"><label>Nationality</label><input id="${id}-nat" value="${isLead?prev.nat||leadNat:prev.nat||""}"></div></div>`;
+    container.appendChild(div);
+  });
+  let total = mpax.adult+mpax.child+mpax.infant;
+  document.getElementById("pax-count-summary").innerText = `${total} passenger${total>1?"s":""} — ${mpax.adult} adult${mpax.adult>1?"s":""}`;
+}
+function buildSeatMaps() {
+  selectedSeatsOut = []; selectedSeatsRet = [];
+  document.getElementById("seat-info-out").innerText = "No seat selected — tap a seat above";
+  const isReturn = modalTrip==='round';
+  document.getElementById("return-seat-section").style.display = isReturn?"block":"none";
+  renderSeatMap("seat-map-out", "out", mpax.adult+mpax.child);
+  if(isReturn) renderSeatMap("seat-map-ret", "ret", mpax.adult+mpax.child);
+}
+function renderSeatMap(containerId, dir, maxSeats) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  const rows=5, cols=["A","B","C","D","E","F"];
+  const selected = dir==="out"? selectedSeatsOut : selectedSeatsRet;
+  for(let r=1;r<=rows;r++) {
+    for(let c of cols) {
+      const seatId = `${c}${r}`;
+      const occ = (r===2 && (c==="B"||c==="E")) || (r===4 && c==="C");
+      const isSel = selected.includes(seatId);
+      const seat = document.createElement("div"); seat.className = `seat ${occ?"occupied":""} ${isSel?"selected":""}`; seat.innerText = seatId;
+      if(!occ) seat.onclick = () => {
+        if(selected.includes(seatId)) selected.splice(selected.indexOf(seatId),1);
+        else if(selected.length < maxSeats) selected.push(seatId);
+        else alert(`You can select up to ${maxSeats} seats.`);
+        renderSeatMap(containerId, dir, maxSeats);
+      };
+      container.appendChild(seat);
+    }
+  }
+  if(dir==="out") selectedSeatsOut = selected; else selectedSeatsRet = selected;
+}
+function buildReview() {
+  const from = document.getElementById("m-from").value, to = document.getElementById("m-to").value;
+  const dep = document.getElementById("m-depart").value, ret = document.getElementById("m-return")?.value||"";
+  const cabin = document.getElementById("m-cabin").value, airline = document.getElementById("m-airline").value||"—";
+  const price = selectedFlight.price;
+  const total = price * (mpax.adult+mpax.child) * (modalTrip==='round'?2:1);
+  document.getElementById("rv-flight-rows").innerHTML = `<div class="review-row"><span>Route</span><span>${from} → ${to}</span></div><div class="review-row"><span>Type</span><span>${modalTrip==='round'?"Return":"One Way"}</span></div><div class="review-row"><span>Departure</span><span>${dep}</span></div>${modalTrip==='round'&&ret?`<div class="review-row"><span>Return</span><span>${ret}</span></div>`:""}<div class="review-row"><span>Cabin</span><span>${cabin}</span></div><div class="review-row"><span>Airline</span><span>${airline}</span></div>`;
+  document.getElementById("rv-name").innerText = document.getElementById("m-fname").value+" "+document.getElementById("m-lname").value;
+  document.getElementById("rv-email").innerText = document.getElementById("m-email").value;
+  document.getElementById("rv-phone").innerText = document.getElementById("m-phone").value;
+  document.getElementById("rv-passport").innerText = document.getElementById("m-passport").value||"Not provided";
+  let paxHtml = paxForms.map((id,i)=>`<div class="review-row"><span>Pax ${i+1}</span><span>${document.getElementById(`${id}-fname`).value} ${document.getElementById(`${id}-lname`).value}${document.getElementById(`${id}-pass`).value?" | PP: "+document.getElementById(`${id}-pass`).value:""}</span></div>`).join("");
+  document.getElementById("rv-pax-list").innerHTML = paxHtml;
+  document.getElementById("rv-seats").innerHTML = `<div class="review-row"><span>Outbound</span><span>${selectedSeatsOut.join(", ")||"Not selected"}</span></div>${modalTrip==='round'?`<div class="review-row"><span>Return</span><span>${selectedSeatsRet.join(", ")||"Not selected"}</span></div>`:""}`;
+  document.getElementById("rv-total").innerHTML = "$"+total;
+  bookingPrice = total;
+}
+function showTicketAndConfirm() {
+  const from = document.getElementById("m-from").value, to = document.getElementById("m-to").value;
+  const dep = document.getElementById("m-depart").value, ret = document.getElementById("m-return")?.value||"";
+  const airline = document.getElementById("m-airline").value||"Any airline";
+  const total = bookingPrice;
+  const fromIata = from.match(/\(([A-Z]+)\)/)?.[1]||"EBB";
+  const toIata = to.match(/\(([A-Z]+)\)/)?.[1]||"DEST";
+  document.getElementById("t-from-iata").innerText = fromIata;
+  document.getElementById("t-to-iata").innerText = toIata;
+  document.getElementById("t-trip-type").innerText = modalTrip==='round'?"RETURN TRIP":"ONE WAY";
+  document.getElementById("t-dep-date").innerText = dep;
+  document.getElementById("t-ret-date").innerText = modalTrip==='round'?ret:"N/A";
+  document.getElementById("t-seats").innerText = selectedSeatsOut.join(", ");
+  document.getElementById("t-total-price").innerText = "$"+total;
+  document.getElementById("ticket-overlay").classList.add("open");
+  document.getElementById("modal-overlay").classList.remove("open");
+}
+function closeTicket() { document.getElementById("ticket-overlay").classList.remove("open"); openModal(); }
+function openPayModal() { 
+  document.getElementById("pay-amt-usd").innerText = "$"+bookingPrice;
+  document.getElementById("pay-overlay").classList.add("open");
+}
+function closePayModal() { document.getElementById("pay-overlay").classList.remove("open"); }
+function initiateAirtelPayment() {
+  const phone = document.getElementById("pay-phone-input").value.trim();
+  if(!phone) { alert("Enter Airtel number"); return; }
+  skipPaymentAndWhatsApp();
+}
+function skipPaymentAndWhatsApp() {
+  sendOnWhatsApp();
+  closePayModal();
+}
+function sendOnWhatsApp() {
+  const from = document.getElementById("m-from").value, to = document.getElementById("m-to").value;
+  const dep = document.getElementById("m-depart").value, ret = document.getElementById("m-return")?.value||"";
+  const cabin = document.getElementById("m-cabin").value, airline = document.getElementById("m-airline").value||"Any";
+  const fname = document.getElementById("m-fname").value, lname = document.getElementById("m-lname").value;
+  const phone = document.getElementById("m-phone").value, email = document.getElementById("m-email").value;
+  const nat = document.getElementById("m-nat").value||"N/A", passport = document.getElementById("m-passport").value||"Not provided";
+  const total = bookingPrice;
+  const seatsOut = selectedSeatsOut.join(", ");
+  const seatsRet = modalTrip==='round'?selectedSeatsRet.join(", "):"N/A";
+  let paxLines = paxForms.map((id,i)=>`  PAX ${i+1} — Adult${i===0?" (LEAD)":""}\n  Name       : ${document.getElementById(`${id}-fname`).value} ${document.getElementById(`${id}-lname`).value}\n  Passport   : ${document.getElementById(`${id}-pass`).value||"N/A"}\n  Outbound Seat: ${selectedSeatsOut[i]||"TBD"}${modalTrip==='round'?`\n  Return Seat  : ${selectedSeatsRet[i]||"TBD"}`:""}`).join("\n");
+  const msg = `🟠 *AIRTEL MONEY PAYMENT INITIATED — PEARL AIR*%0A─────────────────────────────%0A📋 *Booking Ref:* PRL-${Math.random().toString(36).substring(2,8).toUpperCase()}%0A⏱ *Time:* ${new Date().toLocaleString('en-GB')}%0A📱 *Payer Airtel No.:* ${phone}%0A🏦 *Merchant:* +254 786 781 665 (Pearl Air Uganda)%0A💵 *Amount:* $${total} (≈ KES ${Math.round(total*130)})%0A─────────────────────────────%0A🛫 *FLIGHT DETAILS*%0ARoute     : ${from} → ${to}%0ATrip Type : ${modalTrip==='round'?"Return Trip ⇄":"One Way →"}%0ADeparture : ${dep}${modalTrip==='round'?`  •  Return: ${ret}`:""}%0AAirline   : ${airline}%0ACabin     : ${cabin}%0ABaggage   : Standard allowance%0AMeal      : Standard meal%0AOutbound Seat(s): ${seatsOut}%0A${modalTrip==='round'?`Return Seat(s): ${seatsRet}%0A`:""}─────────────────────────────%0A👤 *LEAD PASSENGER*%0AName        : ${fname} ${lname}%0AWhatsApp    : ${phone}%0AEmail       : ${email}%0ANationality : ${nat}%0APassport    : ${passport}%0A─────────────────────────────%0A🧳 *ALL PASSENGERS*%0A${paxLines}%0A─────────────────────────────%0A💰 *FARE BREAKDOWN*%0AAdults (${mpax.adult+mpax.child}) : $${total}%0ATOTAL : $${total}%0A─────────────────────────────%0A🎫 *BOARDING PASS / TICKET*%0APlease confirm payment receipt and issue e-ticket. Thank you!`;
+  window.open(`https://wa.me/254786781665?text=${msg}`, '_blank');
+  closeModal(); closeTicket();
+}
+function pickDest(dest) { document.getElementById("m-to").value = dest; document.getElementById("dest-selected-text").innerText = dest; document.getElementById("dest-selected-display").style.display = "block"; }
+
+renderStaticGrids();
+</script>
+</body>
+</html>
