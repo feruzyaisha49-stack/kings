@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pearlairtraveug.online/sitemap.xml
+# Disallow admin/private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.pearlskyug.com/sitemap.xml
+
+# Crawl delay (optional - be polite to servers)
+Crawl-delay: 10
